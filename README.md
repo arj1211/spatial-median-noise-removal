@@ -1,0 +1,10 @@
+- [ ] Folder for source images
+- [ ] Folder for loaded images (matrix)
+- [ ] Folders for distorted images (matrix), grouped based on distortion level
+- [ ] Folders for reconstructed images (matrix), grouped based on distortion level and filter
+- [ ] Reconstructed images visualize into image files as examples placed in a folder.
+- [ ] Function for distorting images
+- [ ] Functions for each of the filter
+- [ ] Function for RMSC calculation
+- [ ] Functions for statistical analysis and visualization of RMSC (could be very case by case)
+- [ ] Three major graphs in that paper: which mask size is good, which T level is good, and finally which filter is good
