@@ -13,7 +13,7 @@
 ## Filters
 - [ ] mean filter
 - [ ] simple median filter
-- [ ] component median filter
+- [x] component median filter
 - [ ] vector median filter
 - [ ] spatial median filter
 - [ ] modified spatial median filter
