@@ -1,7 +1,7 @@
-img = imread("preproc-imgs\12.jpg");
-cs = 5; % dot size to show center pixel
-ms = 100; % mask size (square sidelength)
-step = 20; % to animate faster
+img = imread("preproc-imgs\3.jpg");
+cs = 10; % dot size to show center pixel
+ms = 250; % mask size (square sidelength)
+step = 3; % to animate faster
 for i = 1:step:size(img,1)
     for j = 1:step:size(img,2)
         [dc, bounds] = make_mask(img, [i,j], ms);
