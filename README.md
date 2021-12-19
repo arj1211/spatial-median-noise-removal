@@ -47,13 +47,13 @@
 
 ### Filters
 - [x] mean filter
-- [ ] simple median filter
+- [x] simple median filter
 - [x] component median filter
 - [x] vector median filter
+
+### next
 - [ ] spatial median filter
 - [ ] modified spatial median filter
-
-### temp
-- [ ] Fix median filter to use magnitude
-- [ ] Update mean, median filters + test_make_mask to work with new make_mask
+- [x] Fix median filter to use magnitude
+- [x] Update mean, median filters to work with new make_mask
 - [ ] Describe Mean, Median filters + make_mask (pictorially?)
