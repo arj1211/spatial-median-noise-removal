@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2021a"><title>Untitled</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S2 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><div  class = 'S0'><span>Standardize collected sample images for consistency in further processing.</span></div><div  class = 'S0'><span>Author: Arjun Bawa, Last modified on Dec 20, 2021</span></div><div  class = 'S0'><span>After collecting an assortment of sample images under </span><span style=' font-family: monospace;'>.\src-imgs</span><span>, we wish to ensure they meet size and RGB channel requirements so filtering efforts will yield consistent results for different images.</span></div><div  class = 'S0'><span>Specifically, images must:</span></div><ol  class = 'S1'><li  class = 'S2'><span>Be 400px wide and 300px tall (An arbitrarily chosen size with a 4:3 image ratio)</span></li><li  class = 'S2'><span>Be represented as a matrix with dimensions </span><span style=' font-family: monospace;'>[300 400 3]</span><span>. The matrix 'depth' of 3 is for each of the RGB channels that the image filtering algorithms manipulate. </span></li></ol><div  class = 'S0'><span>Modifying raw images to meet these conditions ensures that filtered results of noisy sample images can be compared accurately, regardless of an image being colorful vs. black &amp; white, regardless of original image dimensions and image format.</span></div><div  class = 'S0'><span>Processed images are saved to the created directory </span><span style=' font-family: monospace;'>.\preproc-imgs</span><span>.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: rgb(2, 128, 9);">% Gather all raw sample images</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >filenames = dir(</span><span style="color: rgb(170, 4, 249);">'src-imgs\*'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >filenames = filenames(3:length(filenames));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: rgb(2, 128, 9);">% If it doesn't exist, make directory to store processed images</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >mkdir </span><span style="color: rgb(170, 4, 249);">'preproc-imgs'</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">for </span><span >i = 1:length(filenames)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    img = imread(strcat(</span><span style="color: rgb(170, 4, 249);">'src-imgs\'</span><span >,filenames(i).name));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% Resize image to chosen dimensions</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    img = imresize(img, [300, 400]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% If image doesn't already have all 3 color channels (e.g. it is</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% originally a greyscale image format), create the color channels while</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% preserving original image colors</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >size(img,3) ~= 3</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        img = repmat(img, [1,1,3]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% Save and rename processed image</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    imwrite(img, strcat(</span><span style="color: rgb(170, 4, 249);">'.\preproc-imgs\'</span><span >, num2str(i), </span><span style="color: rgb(170, 4, 249);">'.jpg'</span><span >));</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">end</span></span></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% 
+% Standardize collected sample images for consistency in further processing.
+% 
+% Author: Arjun Bawa, Last modified on Dec 20, 2021
+% 
+% After collecting an assortment of sample images under |.\src-imgs|, we wish 
+% to ensure they meet size and RGB channel requirements so filtering efforts will 
+% yield consistent results for different images.
+% 
+% Specifically, images must:
+%% 
+% # Be 400px wide and 300px tall (An arbitrarily chosen size with a 4:3 image 
+% ratio)
+% # Be represented as a matrix with dimensions |[300 400 3]|. The matrix 'depth' 
+% of 3 is for each of the RGB channels that the image filtering algorithms manipulate. 
+%% 
+% Modifying raw images to meet these conditions ensures that filtered results 
+% of noisy sample images can be compared accurately, regardless of an image being 
+% colorful vs. black & white, regardless of original image dimensions and image 
+% format.
+% 
+% Processed images are saved to the created directory |.\preproc-imgs|.
+
+% Gather all raw sample images
+filenames = dir('src-imgs\*');
+filenames = filenames(3:length(filenames));
+% If it doesn't exist, make directory to store processed images
+mkdir 'preproc-imgs';
+for i = 1:length(filenames)
+    img = imread(strcat('src-imgs\',filenames(i).name));
+    % Resize image to chosen dimensions
+    img = imresize(img, [300, 400]);
+    % If image doesn't already have all 3 color channels (e.g. it is
+    % originally a greyscale image format), create the color channels while
+    % preserving original image colors
+    if size(img,3) ~= 3
+        img = repmat(img, [1,1,3]);
+    end
+    % Save and rename processed image
+    imwrite(img, strcat('.\preproc-imgs\', num2str(i), '.jpg'));
+end
+##### SOURCE END #####
+-->
+</div></body></html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2021a"><title>Untitled</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S2 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><div  class = 'S0'><span>Apply Component Median Filter (CMF) on Target Image</span></div><div  class = 'S0'><span>Author: Shizhen Li    Date last modified: Dec. 18, 2021</span></div><div  class = 'S0'><span>This function should be used to apply CMF filtering method on the </span><span style=' font-family: monospace;'>image</span><span> param, with a specified </span><span style=' font-family: monospace;'>mask_size.</span></div><div  class = 'S0'><span>The function is supposed to operate on an image matrix created by imread method of matlab. When the function operates on a intake that is not of this expected form, it will throw an error in such situation. </span><span style=' font-family: monospace;'>mask_size</span><span> should be a odd integer, such that each pixel will be perfectly at the center of the mask. When the function operates on even integers, it will warn. However, </span><span style=' font-family: monospace;'>mask_size</span><span> should never be 0 or negative, in which case the function will error.</span></div><div  class = 'S0'><span>The function deals with edges in the following way: the mask will still center the pixel; if the pixel is too close to the edge such that parts of the mask went outside of the edge, those "outside of the edge" part is disregarded; the set of pixels used to determine the median will only contain the valid pixels.</span></div><div  class = 'S0'><span>The function realizes CMF, which is:</span></div><ul  class = 'S1'><li  class = 'S2'><span>For each pixel in the image, place a mask centered at that pixel, the pixel and surrounding pixels included in the mask is extracted.</span></li><li  class = 'S2'><span>From the extracted pixels of concern, sort each component (R, G, or B) and determine the median value for each of them.</span></li><li  class = 'S2'><span>Put the median R, median G, median B values together to create a new pixel, which will be the ouput (CMF filtered) pixel at its original position.</span></li></ul><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">function </span><span >filtered_img = CMF(image, mask_size)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% checks on input validity and normalness</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >(mask_size &lt;= 0)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        error(</span><span style="color: rgb(170, 4, 249);">'CMF: must have a positive mask size'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    img_size = size(image);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >(length(img_size) ~= 3 || img_size(3) ~= 3)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        error(</span><span style="color: rgb(170, 4, 249);">'CMF: the supplied image is not of a expected image form'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >(rem(mask_size, 2) == 0)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        warning(</span><span style="color: rgb(170, 4, 249);">'CMF: mask size is not odd, target pixel cannot be put at the center of the mask'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% setups we do before starting algorithm</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    filtered_img = uint8(zeros(img_size));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% loop through each pixel on the image</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">for </span><span >i = 1:img_size(1)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: rgb(14, 0, 255);">for </span><span >j = 1:img_size(2)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% for each pixel, get a set of masked pixels</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            pixels = make_mask(image, [i, j], mask_size);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% find medians and write into output image.</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            filtered_img(i, j, :) = median(pixels);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">end</span></span></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+function filtered_img = CMF(image, mask_size)
+%  CMF Apply Component Median Filter (CMF) on Target Image
+% 
+% Author: Shizhen Li    Date last modified: Dec. 18, 2021
+% 
+% This function should be used to apply CMF filtering method on the |image| 
+% param, with a specified |mask_size.|
+% 
+% The function is supposed to operate on an image matrix created by imread method 
+% of matlab. When the function operates on a intake that is not of this expected 
+% form, it will throw an error in such situation. |mask_size| should be a odd 
+% integer, such that each pixel will be perfectly at the center of the mask. When 
+% the function operates on even integers, it will warn. However, |mask_size| should 
+% never be 0 or negative, in which case the function will error.
+% 
+% The function deals with edges in the following way: the mask will still center 
+% the pixel; if the pixel is too close to the edge such that parts of the mask 
+% went outside of the edge, those "outside of the edge" part is disregarded; the 
+% set of pixels used to determine the median will only contain the valid pixels.
+% 
+% The function realizes CMF, which is:
+%% 
+% * For each pixel in the image, place a mask centered at that pixel, the pixel 
+% and surrounding pixels included in the mask is extracted.
+% * From the extracted pixels of concern, sort each component (R, G, or B) and 
+% determine the median value for each of them.
+% * Put the median R, median G, median B values together to create a new pixel, 
+% which will be the ouput (CMF filtered) pixel at its original position.
+    % checks on input validity and normalness
+    if (mask_size <= 0)
+        error('CMF: must have a positive mask size');
+    end
+    img_size = size(image);
+    if (length(img_size) ~= 3 || img_size(3) ~= 3)
+        error('CMF: the supplied image is not of a expected image form');
+    end
+    if (rem(mask_size, 2) == 0)
+        warning('CMF: mask size is not odd, target pixel cannot be put at the center of the mask');
+    end
+    
+    % setups we do before starting algorithm
+    filtered_img = uint8(zeros(img_size));
+    
+    % loop through each pixel on the image
+    for i = 1:img_size(1)
+        for j = 1:img_size(2)
+            % for each pixel, get a set of masked pixels
+            pixels = make_mask(image, [i, j], mask_size);
+            % find medians and write into output image.
+            filtered_img(i, j, :) = median(pixels);
+        end
+    end
+end
+##### SOURCE END #####
+-->
+</div></body></html>

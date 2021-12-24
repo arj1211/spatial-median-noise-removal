@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2021a"><title>Untitled</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S1 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S2 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><div  class = 'S0'><span>Apply Modified Spatial Median Filter (MSMF) on target image</span></div><div  class = 'S0'><span>Author: Arjun Bawa, Date last modified: Dec. 21, 2021</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S1'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">function </span><span >filtered_img = MSMF(img, mask_size, thresh)</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    img_size = size(img);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    filtered_img = uint8(zeros(img_size));</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">for </span><span >i = 1:img_size(1)</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >        </span><span style="color: rgb(14, 0, 255);">for </span><span >j = 1:img_size(2)</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >            mask = make_mask(img, [i, j], mask_size);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >            [~, p_idx] = ismember(squeeze(img(i, j, :))', mask, </span><span style="color: rgb(170, 4, 249);">'rows'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >            [~, sort_idx] = sort(sdepth(mask), </span><span style="color: rgb(170, 4, 249);">'ascend'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >            </span><span style="color: rgb(14, 0, 255);">if </span><span >(find(sort_idx == p_idx, 1) &lt;= thresh)</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >                filtered_img(i, j, :) = img(i, j, :);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >            </span><span style="color: rgb(14, 0, 255);">else</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >                filtered_img(i, j, :) = mask(sort_idx(1), :);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >            </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >        </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">end</span></span></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+function filtered_img = MSMF(img, mask_size, thresh)
+%  MSMF Apply Modified Spatial Median Filter (MSMF) on target image
+% 
+% Author: Arjun Bawa, Date last modified: Dec. 21, 2021
+    img_size = size(img);
+    filtered_img = uint8(zeros(img_size));
+    for i = 1:img_size(1)
+        for j = 1:img_size(2)
+            mask = make_mask(img, [i, j], mask_size);
+            [~, p_idx] = ismember(squeeze(img(i, j, :))', mask, 'rows');
+            [~, sort_idx] = sort(sdepth(mask), 'ascend');
+            if (find(sort_idx == p_idx, 1) <= thresh)
+                filtered_img(i, j, :) = img(i, j, :);
+            else
+                filtered_img(i, j, :) = mask(sort_idx(1), :);
+            end
+        end
+    end
+end
+##### SOURCE END #####
+-->
+</div></body></html>

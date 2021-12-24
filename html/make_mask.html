@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2021a"><title>Untitled</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S1 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S2 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><div  class = 'S0'><span>Acquire the pixels under mask based on image, center_pixel position, and mask size.</span></div><div  class = 'S0'><span>Author: Arjun Bawa, Last modified on Dec 4, 2021</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S1'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">function </span><span >[mask, bounds] = make_mask(img, pos, msize)</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    start_h = max([pos(1) - floor(msize/2), 1]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    end_h = min([pos(1) + floor(msize/2), size(img, 1)]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    start_w = max([pos(2) - floor(msize/2), 1]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    end_w = min([pos(2) + floor(msize/2), size(img, 2)]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    mask = permute(img(start_h:end_h, start_w:end_w, :), [3,1,2]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    mask = transpose(double([mask(1, :); mask(2, :); mask(3, :)]));</span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S2'><span style="white-space: pre"><span >    bounds = [start_h, end_h; start_w,end_w];</span></span></div></div><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">end</span></span></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+function [mask, bounds] = make_mask(img, pos, msize)
+%  MAKE_MASK Acquire the pixels under mask based on image, center_pixel position, and mask 
+% size.
+% 
+% Author: Arjun Bawa, Last modified on Dec 4, 2021
+    start_h = max([pos(1) - floor(msize/2), 1]);
+    end_h = min([pos(1) + floor(msize/2), size(img, 1)]);
+    
+    start_w = max([pos(2) - floor(msize/2), 1]);
+    end_w = min([pos(2) + floor(msize/2), size(img, 2)]);
+    
+    mask = permute(img(start_h:end_h, start_w:end_w, :), [3,1,2]);
+    mask = transpose(double([mask(1, :); mask(2, :); mask(3, :)]));
+    
+    bounds = [start_h, end_h; start_w,end_w];
+end
+##### SOURCE END #####
+-->
+</div></body></html>

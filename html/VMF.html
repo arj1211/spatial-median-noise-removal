@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2021a"><title>Untitled</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(0, 0, 0); font-family: Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S2 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.CodeBlock { background-color: #F7F7F7; margin: 10px 0 10px 0;}
+.S3 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 1px solid rgb(233, 233, 233); border-bottom: 0px none rgb(0, 0, 0); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 0px none rgb(0, 0, 0); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(233, 233, 233); border-right: 1px solid rgb(233, 233, 233); border-top: 0px none rgb(0, 0, 0); border-bottom: 1px solid rgb(233, 233, 233); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 17.234px; min-height: 18px; white-space: nowrap; color: rgb(0, 0, 0); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><div  class = 'S0'><span>Apply Vector Median Filter (VMF) on target image</span></div><div  class = 'S0'><span>Author: Shizhen Li. Last modified on Dec 18, 2021</span></div><div  class = 'S0'><span>This function should be used to apply VMF filtering technique on the parameter matlab-imported </span><span style=' font-family: monospace;'>image</span><span> (as 3D matrix) with a mask size of </span><span style=' font-family: monospace;'>mask_size</span><span>.</span></div><div  class = 'S0'><span>A VMF is defined as follows:</span></div><ul  class = 'S1'><li  class = 'S2'><span>For each pixel in the mask, find its "distance" (in color values) to every other pixel in the mask (norm of the difference), and sum them up.</span></li><li  class = 'S2'><span>Sort them by this sum, the pixel with the smallest sum will be the pixel chosen to place at the output.</span></li></ul><div  class = 'S0'><span>Error condition: When the supplied mask size is less than 1, the function will throw an error; when the supplied image is not of the form that a matlab-read image should be, the function will throw an error</span></div><div  class = 'S0'><span>Warning condition: When the supplied mask size is not a odd number, the chosen pixel cannot be place at exact center. The function will take action against that, and will warn this situation.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">function </span><span >filtered_img = VMF(image, mask_size)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% error checks</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >(mask_size &lt;= 0)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        error(</span><span style="color: rgb(170, 4, 249);">'VMF: must have a positive mask size'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    img_size = size(image);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >(length(img_size) ~= 3 || img_size(3) ~= 3)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        error(</span><span style="color: rgb(170, 4, 249);">'VMF: the supplied image is not of a expected image form'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">if </span><span >(rem(mask_size, 2) == 0)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        warning(</span><span style="color: rgb(170, 4, 249);">'VMF: mask size is not odd, target pixel cannot be put at the center of the mask'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% setups we do before starting algorithm</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    filtered_img = uint8(zeros(img_size));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(2, 128, 9);">% loop through each pixel on the image</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">for </span><span >i = 1:img_size(1)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: rgb(14, 0, 255);">for </span><span >j = 1:img_size(2)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% for each pixel, get a set of masked pixels.</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            pixels = make_mask(image, [i, j], mask_size);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% calculate the distance between each pixels</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% taking the shortcut pdist and squareform, see matlab manual</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            dist_matrix = squareform(pdist(pixels));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% summing columns up for distance sum, then find minimum</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            [~, min_index] = min(sum(dist_matrix));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            </span><span style="color: rgb(2, 128, 9);">% write out the desired pixel to the output pixel</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            filtered_img(i, j, :) = pixels(min_index, :);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: rgb(14, 0, 255);">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: rgb(14, 0, 255);">end</span></span></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+function filtered_img = VMF(image, mask_size)
+%  VMF Apply Vector Median Filter (VMF) on target image
+% 
+% Author: Shizhen Li. Last modified on Dec 18, 2021
+% 
+% This function should be used to apply VMF filtering technique on the parameter 
+% matlab-imported |image| (as 3D matrix) with a mask size of |mask_size|.
+% 
+% A VMF is defined as follows:
+%% 
+% * For each pixel in the mask, find its "distance" (in color values) to every 
+% other pixel in the mask (norm of the difference), and sum them up.
+% * Sort them by this sum, the pixel with the smallest sum will be the pixel 
+% chosen to place at the output.
+%% 
+% Error condition: When the supplied mask size is less than 1, the function 
+% will throw an error; when the supplied image is not of the form that a matlab-read 
+% image should be, the function will throw an error
+% 
+% Warning condition: When the supplied mask size is not a odd number, the chosen 
+% pixel cannot be place at exact center. The function will take action against 
+% that, and will warn this situation.
+    % error checks
+    if (mask_size <= 0)
+        error('VMF: must have a positive mask size');
+    end
+    img_size = size(image);
+    if (length(img_size) ~= 3 || img_size(3) ~= 3)
+        error('VMF: the supplied image is not of a expected image form');
+    end
+    if (rem(mask_size, 2) == 0)
+        warning('VMF: mask size is not odd, target pixel cannot be put at the center of the mask');
+    end
+    
+    % setups we do before starting algorithm
+    filtered_img = uint8(zeros(img_size));
+    
+    % loop through each pixel on the image
+    for i = 1:img_size(1)
+        for j = 1:img_size(2)
+            % for each pixel, get a set of masked pixels.
+            pixels = make_mask(image, [i, j], mask_size);
+            % calculate the distance between each pixels
+            % taking the shortcut pdist and squareform, see matlab manual
+            dist_matrix = squareform(pdist(pixels));
+            % summing columns up for distance sum, then find minimum
+            [~, min_index] = min(sum(dist_matrix));
+            % write out the desired pixel to the output pixel
+            filtered_img(i, j, :) = pixels(min_index, :);
+        end
+    end
+end
+##### SOURCE END #####
+-->
+</div></body></html>
